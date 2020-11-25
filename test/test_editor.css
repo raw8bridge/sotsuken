@@ -1,0 +1,6 @@
+.prettyprint ol.linenums > li {
+	list-style-type: decimal; 
+}
+li.L2, li.L4, li.L6, li.L8, li.L0 {
+    background: #eee;
+}
