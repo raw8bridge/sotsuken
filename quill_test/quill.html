@@ -1,0 +1,34 @@
+<!doctype html>
+<!-- 参考 : https://qiita.com/mima_ita/items/bacf3ca3c078d1e6c70f -->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Test Quill</title>
+    <!-- highlight.js を使う場合はquillの前に参照する-->
+    <link rel="stylesheet"
+        href="http://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/default.min.css">
+    <script src="http://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js"></script>
+
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.7/quill.js"></script>
+
+
+
+</head>
+
+<body>
+
+
+    <!-- Create the editor container -->
+    <form id="form">
+        <textarea name="contents" style="display:none" id="contents"></textarea>
+        <div id="editor">初期のエディター内テキスト</div>
+        <button type="button" onclick="clickSubmit();">送信</button>
+    </form>
+
+    <script type="text/javascript" src="quillcustom.js"></script>
+
+</body>
+
+</html>
