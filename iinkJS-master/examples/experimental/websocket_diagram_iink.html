@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="true"/>
+
+    <title>WEBSOCKET Diagram iink</title>
+
+    <link rel="stylesheet" href="../examples.css">
+
+    <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+    <script type="text/javascript" src="../../dist/iink.min.js"></script>
+  </head>
+
+  <body>
+    <div id="result"></div>
+    <div>
+      <nav>
+        <div class="button-div">
+          <button id="clear" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
+            <img src="../assets/img/clear.svg">
+          </button>
+          <button id="undo" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
+            <img src="../assets/img/undo.svg">
+          </button>
+          <button id="redo" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
+            <img src="../assets/img/redo.svg">
+          </button>
+        </div>
+        <div class="spacer"></div>
+        <button class="classic-btn" id="convert" disabled>Convert</button>
+      </nav>
+      <div id="editor" touch-action="none"></div>
+    </div>
+    <script>
+      const editorElement = document.getElementById('editor');
+      const undoElement = document.getElementById('undo');
+      const redoElement = document.getElementById('redo');
+      const clearElement = document.getElementById('clear');
+      const convertElement = document.getElementById('convert');
+
+      editorElement.addEventListener('load', () =>{
+        convertElement.disabled = false;
+      });
+
+      editorElement.addEventListener('changed', (event) => {
+        undoElement.disabled = !event.detail.canUndo;
+        redoElement.disabled = !event.detail.canRedo;
+        clearElement.disabled = event.detail.isEmpty;
+        convertElement.disabled = !event.detail.canConvert;
+      });
+
+      undoElement.addEventListener('click', () =>{
+        editorElement.editor.undo();
+      });
+      redoElement.addEventListener('click', () =>{
+        editorElement.editor.redo();
+      });
+      clearElement.addEventListener('click', () =>{
+        editorElement.editor.clear();
+      });
+      convertElement.addEventListener('click', () =>{
+        editorElement.editor.convert();
+      });
+
+      Object.keys(iink.Constants.Logger)
+        .filter(key => ['MODEL', 'RECOGNIZER'].includes(key))
+        .forEach(key => iink.LoggerConfig.getLogger(iink.Constants.Logger[key]).setLevel('DEBUG', false));
+
+      /**
+       * Attach an editor to the document
+       * @param {Element} The DOM element to attach the ink paper
+       * @param {Object} The recognition parameters
+       */
+      iink.register(editorElement, {
+        recognitionParams: {
+          type: 'DIAGRAM',
+          protocol: 'WEBSOCKET',
+          server: {
+            scheme: 'https',
+            host: 'webdemoapi.myscript.com',
+            applicationKey: '515131ab-35fa-411c-bb4d-3917e00faf60',
+            hmacKey: '54b2ca8a-6752-469d-87dd-553bb450e9ad',
+            websocket: {
+              pingEnabled: false,
+              autoReconnect: true
+            }
+          },
+          iink: {
+            renderer: {
+              debug: {
+                'draw-text-boxes': true
+              }
+            }
+          }
+        }
+      });
+
+      window.addEventListener('resize', () =>{
+        editorElement.editor.resize();
+      });
+    </script>
+  </body>
+
+</html>
