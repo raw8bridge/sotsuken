@@ -10,23 +10,38 @@
 </head>
 
 <body>
-    <form id="check_form">
-        <input type="radio" name="check" id="syori" checked>処理
-        <input type="radio" name="check" id="handan">判断
-        <input type="radio" name="check" id="roop">ループ
-    </form>
-    <br>
-    <form id="main_form">
-        <div id="input_0">
-            <input type="text" name="start" id="inputform_0" placeholder="開始">
-            <input type="radio" name="select" id="under_0" value="input_0" checked>
+    <div class="flex-container">
+        <div class="check_form_area">
+            <form id="check_form">
+                <ul>
+                    <li>
+                        <input type="radio" name="select_symbol" value="process" checked>処理
+                    </li>
+                    <li>
+                        <input type="radio" name="select_symbol" value="decision">判断
+                    </li>
+                    <li>
+                        <input type="radio" name="select_symbol" value="loop_limit">ループ
+                    </li>
+                </ul>
+            </form>
         </div>
-        <div id="add_area"></div>
-        <input type="text" name="last" id="inputform_last" placeholder="終了">
-    </form>
-    <input type="button" value="フォーム追加" onclick="addForm()">
+
+        <div class="main_form_area">
+            <form id="main_form">
+                <div id="input_0">
+                    <input type="text" name="start" id="inputform_0" class="terminator" placeholder="開始">
+                    <input type="radio" name="select_line" id="under_0" value="input_0" class="select_line" checked>
+                </div>
+                <div id="add_area"></div>
+                <input type="text" name="last" id="inputform_last" class="terminator" placeholder="終了">
+            </form>
+            <input type="button" value="追加" onclick="addForm()">
+        </div>
+    </div>
 </body>
 
 <!-- 参考：appendChildでフォームを追加する【JavaScript】
 URL : https://web-tsuku.life/add-form-appendchild/ -->
+
 </html>

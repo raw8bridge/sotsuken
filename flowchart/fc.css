@@ -1,4 +1,53 @@
+* {
+    box-sizing: border-box;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.check_form_area {
+    background-color: #f0f0f0;
+    margin-right: 20px;
+}
+
+.main_form_area {
+}
+
 #main_form input {
     display: block;
     margin-bottom: 10px;
+    text-align: center;
+}
+
+.select_line {
+    width: 20px;
+    height: 20px;
+    margin-left: 90px;
+}
+
+.terminator {
+    width: 200px;
+    height: 40px;
+    border-color: black;
+    border-radius: 20px;
+}
+
+.decision {
+	width: 200px;
+    height: 80px;
+    border-color: black;
+	background: linear-gradient(135deg, transparent 15px, #00E5FF 0) top left,
+	linear-gradient(-135deg, transparent 15px, #00E5FF 0) top right;
+	/* linear-gradient(-45deg, transparent 15px, #00E5FF 0) bottom right,
+	linear-gradient(45deg, transparent 15px, #00E5FF 0) bottom left; */
+	background-size: 50% 50%;
+	background-repeat: no-repeat;
+    
+}
+
+.process {
+    width: 200px;
+    height: 40px;
+    border-color: black;
 }
