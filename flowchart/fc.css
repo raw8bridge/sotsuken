@@ -9,15 +9,18 @@
 .check_form_area {
     background-color: #f0f0f0;
     margin-right: 20px;
+    padding-right: 20px;
 }
 
-.main_form_area {
-}
+.main_form_area {}
 
 #main_form input {
     display: block;
     margin-bottom: 10px;
     text-align: center;
+    outline: none;
+    border: none;
+    
 }
 
 .select_line {
@@ -29,25 +32,39 @@
 .terminator {
     width: 200px;
     height: 40px;
-    border-color: black;
-    border-radius: 20px;
+    background-image: url("./img/terminator.png");
+    background-size: 200px 40px;
+}
+
+.loop {
+    width: 200px;
+    height: 60px;
+    background-image: url("./img/loop_start.png");
+    background-size: 200px 60px;
+}
+
+.loop_end {
+    width: 200px;
+    height: 60px;
+    background-image: url("./img/loop_end.png");
+    background-size: 200px 60px;
 }
 
 .decision {
-	width: 200px;
+    width: 200px;
     height: 80px;
-    border-color: black;
-	background: linear-gradient(135deg, transparent 15px, #00E5FF 0) top left,
-	linear-gradient(-135deg, transparent 15px, #00E5FF 0) top right;
-	/* linear-gradient(-45deg, transparent 15px, #00E5FF 0) bottom right,
-	linear-gradient(45deg, transparent 15px, #00E5FF 0) bottom left; */
-	background-size: 50% 50%;
-	background-repeat: no-repeat;
-    
+    background-image: url("./img/decision.png");
+    background-size: 200px 80px;
 }
 
 .process {
     width: 200px;
     height: 40px;
-    border-color: black;
+    background-image: url("./img/process.png");
+    background-size: 200px 40px;
+}
+
+.decision_container {
+    display: flex;
+    align-items: flex-start;
 }

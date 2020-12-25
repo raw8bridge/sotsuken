@@ -23,7 +23,7 @@ function addForm() {
 
     // 選択状態の値(value)を取得
     var selected_val = radioNodeList.value;
-    console.log(selected_val); // 確認用
+    // console.log(selected_val); // 確認用
 
     if (symbol == 'process') {
         addProcess(symbol, i, selected_val);
@@ -32,7 +32,7 @@ function addForm() {
         i++;
     } else if (symbol == 'decision') {
         addDecision(symbol, i, selected_val);
-        i+=2;
+        j++;
     }
 
     i++;
@@ -99,25 +99,18 @@ function addLoop(symbol, i, selected_val) {
 }
 
 function addDecision(symbol, i, selected_val) {
-    // 追加するdiv（大枠）
-    var wrap_div = document.createElement('div');
-    wrap_div.id = 'input_' + i;
-    // Flexコンテナ（親要素）
+    // 追加するdiv（親要素）
     var parent_div = document.createElement('div');
     parent_div.id = 'decision_' + i;
     parent_div.className = 'decision_container';
-    // 横並び要素（子要素）
-    var flex_div1 = document.createElement('div');
-    flex_div1.id = 'line_' + i + '_1';
-    flex_div1.className =  'left_line';
-    var flex_div2 = document.createElement('div');
-    flex_div2.id = 'line_' + i + '_2';
-    flex_div2.className =  'right_line';
-    // 追加するdiv（ラジオボタン）
+    // 追加するdiv（子要素）
     var input_div1 = document.createElement('div');
-    input_div1.id = 'input_' + (i + 1);
+    input_div1.id = 'line_' + i;
     var input_div2 = document.createElement('div');
-    input_div2.id = 'input_' + (i + 2);
+    input_div2.id = 'line_' + i + '_' + j;
+    //
+    var input_div1_1 = document.createElement('div');
+    input_div1_1.id = 'input_' + i;
     // 追加するテキストボックス
     var input_data = document.createElement('input');
     input_data.type = 'text';
@@ -125,49 +118,35 @@ function addDecision(symbol, i, selected_val) {
     input_data.id = 'inputform_' + i;
     input_data.placeholder = 'フォーム-' + i;
     input_data.className = '' + symbol;
-    // 追加するラジオボタン1（Flex外）
+    // 追加するラジオボタン1
     var radio_data1 = document.createElement('input');
     radio_data1.type = 'radio';
     radio_data1.name = 'select_line';
     radio_data1.id = 'under_' + i;
     radio_data1.value = 'input_' + i;
     radio_data1.className = 'select_line';
-    // 追加するラジオボタン2（Flex内、左）
+    // 追加するラジオボタン2
     var radio_data2 = document.createElement('input');
     radio_data2.type = 'radio';
     radio_data2.name = 'select_line';
-    radio_data2.id = 'under_' + (i + 1);
-    radio_data2.value = 'input_' + (i + 1);
+    radio_data2.id = 'input_' + i + '_' + j;
+    radio_data2.value = 'input_' + i + '_' + j;
     radio_data2.className = 'select_line';
-    // 追加するラジオボタン3（Flex内、右）
-    var radio_data3 = document.createElement('input');
-    radio_data3.type = 'radio';
-    radio_data3.name = 'select_line';
-    radio_data3.id = 'under_' + (i + 2);
-    radio_data3.value = 'input_' + (i + 2);
-    radio_data3.className = 'select_line';
 
     // divに追加
-    // 追加div < ラジオボタン2,3
-    input_div1.appendChild(radio_data2);
-    input_div2.appendChild(radio_data3);
-    // flex子要素 < 追加div
-    flex_div1.appendChild(input_div1);
-    flex_div2.appendChild(input_div2);
-    // flex親要素 < flex子要素
-    parent_div.appendChild(flex_div1);
-    parent_div.appendChild(flex_div2);
-    // 大枠div < テキストボックス、flex親要素、ラジオボタン1
-    wrap_div.appendChild(input_data);
-    wrap_div.appendChild(parent_div);
-    wrap_div.appendChild(radio_data1);
+    input_div1_1.appendChild(input_data);
+    input_div1_1.appendChild(radio_data1);
+    input_div1.appendChild(input_div1_1);   
+    input_div2.appendChild(radio_data2);
+    parent_div.appendChild(input_div1);
+    parent_div.appendChild(input_div2);
 
     // HTML出力
     if (selected_val == 'input_0') {
         var parent = document.getElementById('add_area');
-        parent.insertBefore(wrap_div, parent.firstChild);
+        parent.insertBefore(parent_div, parent.firstChild);
     } else {
         var parent = document.getElementById(selected_val);
-        parent.parentNode.insertBefore(wrap_div, parent.nextSibling);
+        parent.parentNode.insertBefore(parent_div, parent.nextSibling);
     }
 }
