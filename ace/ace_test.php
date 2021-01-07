@@ -10,6 +10,7 @@
 <body>
     <div class="btn-group">
         <div class="btn-group">
+            <!-- 拡大・縮小ボタン -->
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-search"></i> <span class="caret"></span></button>
             <ul class="dropdown-menu" id="font-size">
                 <li><a href="#" data-size="10">小さい</a></li>
@@ -17,9 +18,22 @@
                 <li><a href="#" data-size="14">大きい</a></li>
             </ul>
         </div>
-        <button id="bold" class="btn btn-default"><i class="glyphicon glyphicon-bold"></i></button>
+        <!-- 言語モードボタン -->
+        <div class="btn-group">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="lang">言語<span class="caret"></span></button>
+            <ul class="dropdown-menu" id="language-mode">
+                <li><a href="#" data-language="python">Python</a></li>
+                <li><a href="#" data-language="java">Java</a></li>
+                <li><a href="#" data-language="ruby">Ruby</a></li>
+                <li><a href="#" data-language="html">HTML</a></li>
+                <li><a href="#" data-language="javascript">JavaScript</a></li>
+            </ul>
+        </div>
+        <!-- 保存ボタン -->
         <button id="save" class="btn btn-default"><i class="glyphicon glyphicon-floppy-save"></i></button>
+        <!-- 読み込みボタン -->
         <button id="load" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i></button>
+        <!-- 送信ボタン -->
         <button id="post" class="btn btn-default">送信</button>
     </div>
 
@@ -39,13 +53,14 @@
             enableLiveAutocompletion: true
         });
         editor.setTheme("ace/theme/monokai");
-        editor.getSession().setMode("ace/mode/html");
+        editor.getSession().setMode("ace/mode/python");
 
         $('#font-size').click(function(e) {
             editor.setFontSize($(e.target).data('size'));
         });
-        $('#bold').click(function(e) {
-            editor.insert('<strong>' + editor.getCopyText() + '</strong>');
+        $('#language-mode').click(function(e) {
+            editor.getSession().setMode("ace/mode/" + $(e.target).data('language'));
+            lang.innerHTML = $(e.target).data('language');
         });
         $('#save').click(function(e) {
             localStorage.text = editor.getValue();
@@ -58,7 +73,10 @@
         $('#post').click(function(e) {
             var postData = editor.getValue();
             // console.log(postData);
-            post('index.php', {txt:postData});
+            // console.log($(e.currentTarget).data("language")));
+            post('index.php', {
+                txt: postData
+            });
         });
     </script>
     <!-- 参考: https://qiita.com/naga3/items/1bc268243f2e8a6514e5 -->

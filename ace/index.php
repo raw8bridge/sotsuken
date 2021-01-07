@@ -16,6 +16,10 @@
     } else {
         echo "POST失敗";
     }
+    if(isset($_POST['lang'])){
+        echo "<br>";
+        echo(htmlspecialchars($_POST['lang'], ENT_QUOTES));
+    }
     ?>
 </body>
 

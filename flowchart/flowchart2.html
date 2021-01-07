@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>フローチャート</title>
+    <link rel="stylesheet" href="./fc.css">
+    <script type="text/javascript" src="./fc.js"></script>
+</head>
+
+<body>
+    <form id="check_form">
+        <div class="flex-container">
+            <div class="check_form_area">
+                <div>
+                    <ul>
+                        <li>
+                            <input type="radio" name="select_symbol" value="process" checked>処理
+                        </li>
+                        <li>
+                            <input type="radio" name="select_symbol" value="decision">判断
+                        </li>
+                        <li>
+                            <input type="radio" name="select_symbol" value="loop">ループ
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="main_form_area">
+                <div id="main_form">
+                    <div id="input_0">
+                        <input type="text" name="start" id="inputform_0" class="terminator" placeholder="開始">
+                        <input type="radio" name="select_line" id="under_0" value="input_0" class="select_line" checked>
+                    </div>
+                    <div id="add_area"></div>
+                    <input type="text" name="last" id="inputform_last" class="terminator" placeholder="終了">
+                </div>
+                <input type="button" value="追加" onclick="addForm()">
+            </div>
+        </div>
+    </form>
+</body>
+
+<!-- 参考：appendChildでフォームを追加する【JavaScript】
+URL : https://web-tsuku.life/add-form-appendchild/ -->
+
+</html>

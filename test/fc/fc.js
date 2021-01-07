@@ -5,21 +5,18 @@
 var i = 1;
 var j = 1;
 function addForm() {
-    // check_form要素を取得
-    var check_form = document.getElementById('check_form');
+    // main_form要素を取得
+    var main_form = document.getElementById('main_form');
 
     // form要素内のラジオボタングループ(name="select_symbol")を取得
-    var checkList = check_form.select_symbol;
+    var checkList = main_form.select_symbol;
 
     // 選択中のシンボルを取得
     var symbol = checkList.value;
     console.log(symbol); // 確認用
 
-    // main_form要素を取得
-    var element = document.getElementById('main_form');
-
     // form要素内のラジオボタングループ(name="select_line")を取得
-    var radioNodeList = check_form.select_line;
+    var radioNodeList = main_form.select_line;
 
     // 選択状態の値(value)を取得
     var selected_val = radioNodeList.value;
