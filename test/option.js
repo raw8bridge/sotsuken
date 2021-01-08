@@ -1,3 +1,9 @@
+window.onload = function () {
+    // ページ読み込み時に実行したい処理
+    setTimeout(function(){
+        $('.math_div').hide();
+   },500);
+}
 $(function () {
     $('input[name="c_editor"]').change(function () {
         if ($(this).is(':checked'))
