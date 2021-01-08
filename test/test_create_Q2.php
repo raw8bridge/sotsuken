@@ -132,8 +132,6 @@ $test_id = 1; // ダミー
                 <button id="save" class="btn btn-default"><i class="glyphicon glyphicon-floppy-save"></i></button>
                 <!-- 読み込みボタン -->
                 <button id="load" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i></button>
-                <!-- 送信ボタン -->
-                <button id="post" class="btn btn-default">送信</button>
             </div>
 
             <div id="editor" style="height: 600px; width: 800px;"></div>
@@ -141,7 +139,6 @@ $test_id = 1; // ダミー
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ext-language_tools.js"></script>
-            <script src="./post.js"></script>
 
             <script>
                 var editor = ace.edit("editor");
@@ -168,12 +165,6 @@ $test_id = 1; // ダミー
                 $('#load').click(function(e) {
                     if (!confirm("読み込みますか？")) return;
                     editor.setValue(localStorage.text, -1);
-                });
-                $('#post').click(function(e) {
-                    var postData = editor.getValue();
-                    post('index.php', {
-                        txt: postData
-                    });
                 });
             </script>
         </div>
@@ -205,6 +196,11 @@ $test_id = 1; // ダミー
             </div>
 
             <script type="text/javascript" src="./fc/fc.js"></script>
+        </div>
+
+        <!-- 手書き数式 -->
+        <div class="math_div" style="display: none;">
+                <h4>手書き数式</h4>
         </div>
 
         <!-- 選択肢 -->

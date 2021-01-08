@@ -18,10 +18,9 @@
     text-align: center;
     outline: none;
     border: none;
-    
 }
 
-.select_line {
+.select_line[type=radio] {
     width: 20px;
     height: 20px;
     margin-left: 90px;

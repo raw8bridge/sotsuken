@@ -11,4 +11,10 @@ $(function () {
         else
             $('.flowchart_div').hide();
     });
+    $('input[name="c_math"]').change(function () {
+        if ($(this).is(':checked'))
+            $('.math_div').show()
+        else
+            $('.math_div').hide();
+    });
 });
