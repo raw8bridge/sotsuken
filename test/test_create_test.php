@@ -2,6 +2,17 @@
 include "./function/htmlspchar.php";
 include "./db/connectDB.php";
 
+session_start();
+// ログイン状態チェック
+if (!isset($_SESSION["NAME"])) {
+    header("Location: Logout.php");
+    exit;
+}
+if (!($_SESSION["ROLE"] == '1')) {
+    header("Location: Main_student.php");
+    exit;
+}
+
 $teacher_id = 1; // テスト用教員ID
 
 try {
@@ -25,7 +36,7 @@ $rows_cnt = count($rows); // 件数
 
 <head>
     <meta charset="utf-8">
-    <title>テスト作成ページ</title>
+    <title>課題作成ページ</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Bootstrap CSS -->
     <!--
@@ -33,8 +44,8 @@ $rows_cnt = count($rows); // 件数
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous"> -->
 </head>
 <body>
-    <h2>テスト作成</h2>
-    <form action="test_create_Q2.php" method="post">
+    <h2>課題作成</h2>
+    <form action="test_create_Q.php" method="post">
         <p>科目名</p>
         <select name="subject_id">
         <?php
@@ -44,7 +55,7 @@ $rows_cnt = count($rows); // 件数
         ?>
         </select>
         
-        <p>テスト名</p>
+        <p>課題名</p>
         <input type="text" name="test_name" value="" class="test_name_form">
         <input type="submit" value="作成">
     </form>

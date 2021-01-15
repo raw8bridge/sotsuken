@@ -33,6 +33,7 @@ if (isset($_SESSION['test']['iscreate'])) {
   echo "error";
   exit();
 }
+$_SESSION['test']['iscreate'] = false;
 
 try {
   $stmt = $pdo->prepare('INSERT INTO TestTable (subject_ID, creater_ID, test_name) VALUES (?, ?, ?);');

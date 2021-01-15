@@ -15,7 +15,7 @@ $db['dbname'] = $login->dbname;  // データベース名
 $errorMessage = "";
 $signUpMessage = "";
 
-// ログインボタンが押された場合
+// 新規登録ボタンが押された場合
 if (isset($_POST["signUp"])) {
     // 1. ユーザIDの入力チェック
     if (empty($_POST["username"])) {  // 値が空のとき
@@ -30,6 +30,7 @@ if (isset($_POST["signUp"])) {
         // 入力したユーザIDとパスワードを格納
         $username = $_POST["username"];
         $password = $_POST["password"];
+        $role = $_POST["role"];
 
         // 2. ユーザIDとパスワードが入力されていたら認証する
         $dsn = sprintf('mysql: host=%s; dbname=%s; charset=utf8', $db['host'], $db['dbname']);
@@ -38,9 +39,9 @@ if (isset($_POST["signUp"])) {
         try {
             $pdo = new PDO($dsn, $db['user'], $db['pass'], array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION));
 
-            $stmt = $pdo->prepare("INSERT INTO userData(name, password) VALUES (?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO userData(name, password, role_ID) VALUES (?, ?, ?)");
 
-            $stmt->execute(array($username, password_hash($password, PASSWORD_DEFAULT)));  // パスワードのハッシュ化を行う（今回は文字列のみなのでbindValue(変数の内容が変わらない)を使用せず、直接excuteに渡しても問題ない）
+            $stmt->execute(array($username, password_hash($password, PASSWORD_DEFAULT), $role));  // パスワードのハッシュ化を行う（今回は文字列のみなのでbindValue(変数の内容が変わらない)を使用せず、直接excuteに渡しても問題ない）
             $userid = $pdo->lastinsertid();  // 登録した(DB側でauto_incrementした)IDを$useridに入れる
 
             $signUpMessage = '登録が完了しました。あなたの登録IDは '. $userid. ' です。パスワードは '. $password. ' です。';  // ログイン時に使用するIDとパスワード
@@ -66,9 +67,11 @@ if (isset($_POST["signUp"])) {
         <form id="loginForm" name="loginForm" action="" method="POST">
             <fieldset>
                 <legend>新規登録フォーム</legend>
-                <div><font color="#ff0000"><?php echo htmlspecialchars($errorMessage, ENT_QUOTES); ?></font></div>
-                <div><font color="#0000ff"><?php echo htmlspecialchars($signUpMessage, ENT_QUOTES); ?></font></div>
+                <div><?php echo htmlspecialchars($errorMessage, ENT_QUOTES); ?></div>
+                <div><?php echo htmlspecialchars($signUpMessage, ENT_QUOTES); ?></div>
                 <label for="username">ユーザー名</label><input type="text" id="username" name="username" placeholder="ユーザー名を入力" value="<?php if (!empty($_POST["username"])) {echo htmlspecialchars($_POST["username"], ENT_QUOTES);} ?>">
+                <br>
+                <label for="role">教員：1, 学生：2</label><input type="number" id="role" name="role" min="1" max="2" value="<?php if (!empty($_POST["role"])) {echo htmlspecialchars($_POST["role"], ENT_QUOTES);} ?>">
                 <br>
                 <label for="password">パスワード</label><input type="password" id="password" name="password" value="" placeholder="パスワードを入力">
                 <br>

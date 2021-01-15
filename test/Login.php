@@ -17,7 +17,7 @@ $errorMessage = "";
 // ログインボタンが押された場合
 if (isset($_POST["login"])) {
     // 1. ユーザIDの入力チェック
-    if (empty($_POST["userid"])) {  // emptyは値が空のとき
+    if (empty($_POST["userid"])) {
         $errorMessage = 'ユーザ名が未入力です。';
     } else if (empty($_POST["password"])) {
         $errorMessage = 'パスワードが未入力です。';
@@ -50,10 +50,26 @@ if (isset($_POST["login"])) {
                     $stmt = $pdo->query($sql);
                     foreach ($stmt as $row) {
                         $row['name'];  // ユーザー名
+                        $row['role_ID'];  // 役職ID
+                        $row['class_ID']; // クラスID
                     }
                     $_SESSION["NAME"] = $row['name'];
-                    header("Location: Main.php");  // メイン画面へ遷移
-                    exit();  // 処理終了
+                    $_SESSION["ROLE"] = $row['role_ID'];
+                    $_SESSION["CLASS_ID"] = $row['class_ID'];
+                    if($_SESSION["ROLE"] == '1'){
+                        header("Location: Main_tercher.php");  // 教員用メイン画面へ遷移
+                        exit();  // 処理終了
+                    }elseif($_SESSION["ROLE"] == '2'){
+                        $stmt = $pdo->prepare('SELECT * FROM Classes WHERE ID = ?');
+                        $stmt->execute(array($_SESSION['CLASS_ID']));
+                        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            $_SESSION['CLASS_NAME'] = $row['class_name'];
+                        }
+                        header("Location: Main_student.php");  // 学生用メイン画面へ遷移
+                        exit();  // 処理終了
+                    }else{
+                        $errorMessage = $_SESSION["ROLE"];
+                    }
                 } else {
                     // 認証失敗
                     $errorMessage = 'ユーザ名あるいはパスワードに誤りがあります。';
@@ -84,7 +100,7 @@ if (isset($_POST["login"])) {
 
 <body>
     <h1>ログイン</h1>
-    <form id="loginForm" name="loginForm" action="" method="post">
+    <form id="loginForm" name="loginForm" action="" method="post" style="width: 800px;">
         <fieldset>
             <legend>ログインフォーム</legend>
             <div><?php echo htmlspecialchars($errorMessage, ENT_QUOTES); ?></div>
@@ -94,13 +110,6 @@ if (isset($_POST["login"])) {
             <label for="password">パスワード</label><input type="password" id="password" name="password" value="" placeholder="パスワードを入力">
             <br>
             <input type="submit" id="login" name="login" value="ログイン">
-        </fieldset>
-    </form>
-    <br>
-    <form action="SignUp.php">
-        <fieldset>
-            <legend>新規登録フォーム</legend>
-            <input type="submit" value="新規登録">
         </fieldset>
     </form>
 </body>

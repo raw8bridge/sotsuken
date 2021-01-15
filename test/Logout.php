@@ -12,6 +12,8 @@ $_SESSION = array();
 
 // セッションクリア(エラー非表示)
 @session_destroy();
+
+header("Location: Login.php");
 ?>
 
 <!doctype html>
