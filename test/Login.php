@@ -57,7 +57,7 @@ if (isset($_POST["login"])) {
                     $_SESSION["ROLE"] = $row['role_ID'];
                     $_SESSION["CLASS_ID"] = $row['class_ID'];
                     if($_SESSION["ROLE"] == '1'){
-                        header("Location: Main_tercher.php");  // 教員用メイン画面へ遷移
+                        header("Location: Main_teacher.php");  // 教員用メイン画面へ遷移
                         exit();  // 処理終了
                     }elseif($_SESSION["ROLE"] == '2'){
                         $stmt = $pdo->prepare('SELECT * FROM Classes WHERE ID = ?');
