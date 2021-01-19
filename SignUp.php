@@ -31,6 +31,7 @@ if (isset($_POST["signUp"])) {
         $username = $_POST["username"];
         $password = $_POST["password"];
         $role = $_POST["role"];
+        $classID = $_POST["classID"];
 
         // 2. ユーザIDとパスワードが入力されていたら認証する
         $dsn = sprintf('mysql: host=%s; dbname=%s; charset=utf8', $db['host'], $db['dbname']);
@@ -39,9 +40,9 @@ if (isset($_POST["signUp"])) {
         try {
             $pdo = new PDO($dsn, $db['user'], $db['pass'], array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION));
 
-            $stmt = $pdo->prepare("INSERT INTO userData(name, password, role_ID) VALUES (?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO userData(name, password, role_ID, class_ID) VALUES (?, ?, ?, ?)");
 
-            $stmt->execute(array($username, password_hash($password, PASSWORD_DEFAULT), $role));  // パスワードのハッシュ化を行う（今回は文字列のみなのでbindValue(変数の内容が変わらない)を使用せず、直接excuteに渡しても問題ない）
+            $stmt->execute(array($username, password_hash($password, PASSWORD_DEFAULT), $role, $classID));  // パスワードのハッシュ化を行う（今回は文字列のみなのでbindValue(変数の内容が変わらない)を使用せず、直接excuteに渡しても問題ない）
             $userid = $pdo->lastinsertid();  // 登録した(DB側でauto_incrementした)IDを$useridに入れる
 
             $signUpMessage = '登録が完了しました。あなたの登録IDは '. $userid. ' です。パスワードは '. $password. ' です。';  // ログイン時に使用するIDとパスワード
@@ -72,6 +73,8 @@ if (isset($_POST["signUp"])) {
                 <label for="username">ユーザー名</label><input type="text" id="username" name="username" placeholder="ユーザー名を入力" value="<?php if (!empty($_POST["username"])) {echo htmlspecialchars($_POST["username"], ENT_QUOTES);} ?>">
                 <br>
                 <label for="role">教員：1, 学生：2</label><input type="number" id="role" name="role" min="1" max="2" value="<?php if (!empty($_POST["role"])) {echo htmlspecialchars($_POST["role"], ENT_QUOTES);} ?>">
+                <br>
+                <label for="classID">クラスID</label><input type="number" id="classID" name="classID" min="1" max="26" value="<?php if (!empty($_POST["classID"])) {echo htmlspecialchars($_POST["classID"], ENT_QUOTES);} ?>">
                 <br>
                 <label for="password">パスワード</label><input type="password" id="password" name="password" value="" placeholder="パスワードを入力">
                 <br>

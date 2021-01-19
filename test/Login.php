@@ -49,10 +49,12 @@ if (isset($_POST["login"])) {
                     $sql = "SELECT * FROM userData WHERE id = $id";  //入力したIDからユーザー名を取得
                     $stmt = $pdo->query($sql);
                     foreach ($stmt as $row) {
+                        $row['ID'];
                         $row['name'];  // ユーザー名
                         $row['role_ID'];  // 役職ID
                         $row['class_ID']; // クラスID
                     }
+                    $_SESSION["ID"] = $row['ID'];
                     $_SESSION["NAME"] = $row['name'];
                     $_SESSION["ROLE"] = $row['role_ID'];
                     $_SESSION["CLASS_ID"] = $row['class_ID'];

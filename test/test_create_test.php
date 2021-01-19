@@ -13,7 +13,7 @@ if (!($_SESSION["ROLE"] == '1')) {
     exit;
 }
 
-$teacher_id = 1; // テスト用教員ID
+$teacher_id = $_SESSION['ID']; // 教員ID
 
 try {
     // sql

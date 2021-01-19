@@ -1,0 +1,10 @@
+.link_button{
+    border: none;
+    background-color: white;
+    color: blue;
+    cursor: pointer;
+}
+
+.link_button:hover{
+    text-decoration: underline;
+}

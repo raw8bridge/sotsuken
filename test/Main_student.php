@@ -25,7 +25,7 @@ if (!($_SESSION["ROLE"] == '2')) {
     <p>ユーザ名:<?php echo htmlspecialchars($_SESSION["NAME"], ENT_QUOTES); ?><br>
     所属　　:<?php echo htmlspecialchars($_SESSION["CLASS_NAME"], ENT_QUOTES); ?></p>
     <ul>
-        <li><a href="test_create_test.php">課題を選択</a></li>
+        <li><a href="test_select.php">課題を選択</a></li>
         <li><a href="Logout.php">ログアウト</a></li>
     </ul>
 </body>
