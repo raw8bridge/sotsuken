@@ -1,5 +1,6 @@
 .link_button{
     border: none;
+    font-size: 16px;
     background-color: white;
     color: blue;
     cursor: pointer;

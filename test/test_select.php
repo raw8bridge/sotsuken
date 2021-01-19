@@ -64,6 +64,9 @@ try {
 
 <body>
     <h1>テスト選択画面</h1>
+    <p>ユーザ名:<?php echo htmlspecialchars($_SESSION["NAME"], ENT_QUOTES); ?><br>
+    所属　　:<?php echo htmlspecialchars($_SESSION["CLASS_NAME"], ENT_QUOTES); ?></p>
+    <ul>
 
     <?php foreach ($subjects as $sub_id => $sub_name) { ?>
         <h2><?php echo (hsc($sub_name['name'])); ?></h2>
