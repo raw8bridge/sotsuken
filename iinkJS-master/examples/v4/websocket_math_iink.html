@@ -36,6 +36,7 @@
           <img src="../assets/img/redo.svg">
         </button>
         <button onclick="getResult();">Result</button>
+        <button onclick="getCopy();">Copy</button>
       </div>
       <div class="spacer"></div>
       <button class="classic-btn" id="convert" disabled>Convert</button>
@@ -136,8 +137,16 @@
       let len = result.length;
 
       console.log('Result: ' + result.item(0).textContent);
-      postForm(result.item(0).textContent)
-      
+      // postForm(result.item(0).textContent);
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.id = 'copytext';
+      input.value = result.item(0).textContent;
+      document.body.appendChild(input);
+      var copytext = document.getElementById('copytext');
+      copytext.select();
+      document.execCommand('copy');
+      copytext.remove;
     }
     function postForm(value) {
 
@@ -147,7 +156,7 @@
       form.method = 'POST';
       form.action = '../../../test_mathjax.php';
 
-      request.type = 'hidden'; //入力フォームが表示されないように
+      request.type = 'hidden';
       request.name = 'text';
       request.value = value;
 
@@ -156,6 +165,22 @@
 
       form.submit();
 
+    }
+    function getCopy() {
+      let div1 = document.getElementById('result');
+      let result = div1.getElementsByTagName('annotation');
+
+      console.log('Result: ' + result.item(0).textContent);
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.id = 'copytext';
+      input.value = '\\(' + result.item(0).textContent + '\\)';
+      document.body.appendChild(input);
+
+      var copytext = document.getElementById('copytext');
+      copytext.select();
+      document.execCommand('copy');
+      copytext.remove();
     }
   </script>
 </body>

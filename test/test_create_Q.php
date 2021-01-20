@@ -2,7 +2,7 @@
 include "./function/htmlspchar.php";
 session_start();
 
-if (isset($_POST['next'])) {
+if (isset($_POST['next']) || isset($_POST['create'])) {
     if (isset($_POST['Q_number'])) {
         $Q_number = $_POST['Q_number'];
 
@@ -17,17 +17,19 @@ if (isset($_POST['next'])) {
             'editor_text' => $_POST['editor_text']
         );
 
-        echo ('<pre>');
-        var_dump($_SESSION['test']); // 確認用メッセージ
-        echo ('</pre>');
+        // echo ('<pre>');
+        // var_dump($_SESSION['test']); // 確認用メッセージ
+        // echo ('</pre>');
         $Q_number++;
+        if (isset($_POST['create'])) {
+            $_SESSION['test']['iscreate'] = true;
+        
+            header("Location: ./test_view2.php");
+            exit();
+        }
     }
     // echo "next"; // テストメッセージ
-} elseif (isset($_POST['create'])) {
-    $_SESSION['test']['iscreate'] = true;
 
-    header("Location: ./test_view2.php");
-    exit();
 } else {
     $Q_number = 1;
 }
@@ -35,7 +37,7 @@ if (isset($_POST['next'])) {
 if (isset($_POST['test_name']) and isset($_POST['subject_id'])) {
     $test_name = $_POST['test_name'];
     $subject_id = $_POST['subject_id'];
-    $creater_id = 1; // 作成者ID、ダミー
+    $creater_id = $_SESSION['ID']; // 作成者ID
     $_SESSION['test'][0] = array(
         'test_name' => $test_name,
         'creater_id' => $creater_id,
@@ -116,7 +118,7 @@ $test_id = 1; // ダミー
             <div class="btn-group">
                 <div class="btn-group">
                     <!-- 拡大・縮小ボタン -->
-                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-search"></i> <span class="caret"></span></button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-search"></i> <span class="caret"></span></button>
                     <ul class="dropdown-menu" id="font-size">
                         <li><a href="#" data-size="10">小さい</a></li>
                         <li><a href="#" data-size="12">普通</a></li>
@@ -125,7 +127,7 @@ $test_id = 1; // ダミー
                 </div>
                 <!-- 言語モードボタン -->
                 <div class="btn-group">
-                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="lang">言語<span class="caret"></span></button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="lang">言語<span class="caret"></span></button>
                     <ul class="dropdown-menu" id="language-mode">
                         <li><a href="#" data-language="python">Python</a></li>
                         <li><a href="#" data-language="java">Java</a></li>
@@ -135,9 +137,9 @@ $test_id = 1; // ダミー
                     </ul>
                 </div>
                 <!-- 保存ボタン -->
-                <button id="save" class="btn btn-default"><i class="glyphicon glyphicon-floppy-save"></i></button>
+                <button type="button" id="save" class="btn btn-default"><i class="glyphicon glyphicon-floppy-save"></i></button>
                 <!-- 読み込みボタン -->
-                <button id="load" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i></button>
+                <button type="button" id="load" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i></button>
                 <!-- <a id="post">post</a> -->
             </div>
 
@@ -221,19 +223,19 @@ $test_id = 1; // ダミー
             <div>
                 <nav>
                     <div class="button-div">
-                        <button id="clear" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
+                        <button type="button" id="clear" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
                             <img src="./math/img/clear.svg">
                         </button>
-                        <button id="undo" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
+                        <button type="button" id="undo" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
                             <img src="./math/img/undo.svg">
                         </button>
-                        <button id="redo" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
+                        <button type="button" id="redo" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
                             <img src="./math/img/redo.svg">
                         </button>
-                        <button onclick="getResult();">Result</button>
+                        <button type="button" onclick="getCopy();">コピー</button>
                     </div>
                     <div class="spacer"></div>
-                    <button class="classic-btn" id="convert" disabled>Convert</button>
+                    <button type="button" class="classic-btn" id="convert" disabled>Convert</button>
                 </nav>
                 <div id="editor" touch-action="none"></div>
             </div>

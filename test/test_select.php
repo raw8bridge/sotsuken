@@ -76,6 +76,7 @@ try {
                     <form method="post" action="test_ans.php">
                         <input type="hidden" name="test_id" value="<?php echo (hsc($test["ID"])); ?>">
                         <input type="hidden" name="test_name" value="<?php echo (hsc($test["test_name"])); ?>">
+                        <input type="hidden" name="status" value="start">
                         <input type="submit" class="link_button" value="<?php echo (hsc($test["test_name"])); ?>">
                     </form>
                 </li>

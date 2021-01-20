@@ -2,7 +2,7 @@
 include "./function/htmlspchar.php";
 session_start();
 
-if (isset($_POST['test_id'])) {
+if ($_POST['status'] == 'next' || $_POST['status'] == 'start') {
     // echo('<pre>');
     // var_dump($_POST); // 確認用メッセージ
     // echo('</pre>');
@@ -15,13 +15,13 @@ if (isset($_POST['test_id'])) {
             $stmt->bindValue(1, (int)$test_id, PDO::PARAM_INT);
             $stmt->execute();
             $cnt = $stmt->fetchColumn();
-            var_dump($cnt); // 確認用
+            // var_dump($cnt); // 確認用
         } catch (PDOException $e) {
             print('Error:' . $e->getMessage());
             die();
         }
         $pdo = null;
-        
+
         $_SESSION['ans'][0] = array(
             'test_id' => $test_id,
             'test_name' => $_POST['test_name']
@@ -36,6 +36,8 @@ if (isset($_POST['test_id'])) {
         );
     }
     $test_name = $_SESSION['ans'][0]['test_name'];
+} elseif($_POST['status'] == 'finish') {
+    header("Location: ./test_finish.php");
 } else {
     header("Location: ./test_select.php");
 }
@@ -66,15 +68,22 @@ if (isset($_POST['Q_number'])) {
 include './db/connectDB.php';
 $id = $test_id;
 try {
-    $stmt = $pdo->prepare('SELECT * FROM `QuestionTable` WHERE test_ID=? AND Q_number=?');
+    $stmt = $pdo->prepare('SELECT * FROM `QuestionTable` WHERE test_ID=?');
     $stmt->bindValue(1, (int)$id, PDO::PARAM_INT);
-    $stmt->bindValue(2, (int)$Q_number, PDO::PARAM_INT);
     $stmt->execute();
 
     $rows = $stmt->fetchAll();
-    $Q_row = $rows[0];
-    // $cnt = count($rows);
+    $Q_row = $rows[(int)$Q_number - 1];
+    $cnt = count($rows);
     // var_dump($cnt); // 確認用
+    if ($cnt == (int)$Q_number) {
+        $status = "finish";
+        $btn_txt = "回答";
+    } else {
+        $status = "next";
+        $btn_txt = "次へ";
+    }
+    $page_txt = $Q_number . "/" . (string) $cnt;
 } catch (PDOException $e) {
     print('Error:' . $e->getMessage());
     die();
@@ -97,14 +106,15 @@ try {
 
 //データベース接続切断
 $pdo = null;
-
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
     <title>テスト回答ページ</title>
 </head>
 
@@ -121,10 +131,12 @@ $pdo = null;
             echo "<br>";
         }
         ?>
-        <input type="hidden" , name='test_id' , value=<?php echo hsc($id); ?>>
-        <input type="hidden" , name='Q_number' , value=<?php echo hsc($Q_number); ?>>
-        <input type="submit" value="回答">
+        <input type="hidden" name='test_id' value=<?php echo hsc($id); ?>>
+        <input type="hidden" name='Q_number' value=<?php echo hsc($Q_number); ?>>
+        <input type="hidden" name='status' value=<?php echo ("\"" . $status . "\""); ?>>
+        <input type="submit" value=<?php echo ("\"" . $btn_txt . "\""); ?>>
     </form>
+    <?php echo ($page_txt); ?>
 
 </body>
 

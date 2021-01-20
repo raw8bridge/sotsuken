@@ -17,7 +17,8 @@ if (isset($_POST['text'])) {
 
 <body>
   <p>POSTされた数式</p>
-  <p>\(<?php echo hsc($text) ?>\)</p>
+  <!-- <annotation encoding="application/x-tex">y=\dfrac{a}{x}</annotation> -->
+  <p>次の数式\(<?php echo hsc($text) ?>\)の\(x\)の値を求めよ</p>
 
 </body>
 

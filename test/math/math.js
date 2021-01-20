@@ -84,3 +84,20 @@ iink.register(editorElement, {
 window.addEventListener('resize', () => {
     editorElement.editor.resize();
 });
+
+function getCopy() {
+    let div1 = document.getElementById('result');
+    let result = div1.getElementsByTagName('annotation');
+
+    console.log('Result: ' + result.item(0).textContent);
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.id = 'copytext';
+    input.value = '\\(' + result.item(0).textContent + '\\)';
+    document.body.appendChild(input);
+
+    var copytext = document.getElementById('copytext');
+    copytext.select();
+    document.execCommand('copy');
+    copytext.remove();
+}
