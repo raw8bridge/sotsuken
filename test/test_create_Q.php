@@ -13,7 +13,6 @@ if (isset($_POST['next']) || isset($_POST['create'])) {
             'is_correct' => $_POST['is_correct'],
             'use_editor' => isset($_POST['c_editor']),
             'use_flowchart' => isset($_POST['c_flowchart']),
-            'use_math' => isset($_POST['c_math']),
             'editor_text' => $_POST['editor_text']
         );
 
@@ -23,7 +22,6 @@ if (isset($_POST['next']) || isset($_POST['create'])) {
         $Q_number++;
         if (isset($_POST['create'])) {
             $_SESSION['test']['iscreate'] = true;
-        
             header("Location: ./test_view2.php");
             exit();
         }
@@ -45,12 +43,6 @@ if (isset($_POST['test_name']) and isset($_POST['subject_id'])) {
     );
 }
 
-$storage = array();
-if (isset($_POST['storage'])) {
-    $storage = $_POST['storage'];
-    print_r($storage);
-}
-
 $test_id = 1; // ダミー
 ?>
 
@@ -68,10 +60,6 @@ $test_id = 1; // ダミー
     <link rel="stylesheet" href="./fc/fc.css">
     <link rel="stylesheet" href="./math/math.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-    <!-- Bootstrap CSS -->
-    <!--
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous"> -->
 </head>
 
 <body>
@@ -97,7 +85,7 @@ $test_id = 1; // ダミー
     // }
     ?>
 
-    <h2><?php echo hsc($test_name); ?></h2>
+    <h2><?php echo hsc($_SESSION['test'][0]['test_name']); ?></h2>
     <h3>問<?php echo hsc($Q_number); ?></h3>
 
     <form action="" method="post" id="main_form">
@@ -160,7 +148,7 @@ $test_id = 1; // ダミー
                 // });
 
                 var observer = new MutationObserver(function(mutations) {
-                    /** DOMの変化が起こった時の処理 */
+                    // DOMの変化が起こった時の処理
                     // console.log('DOMが変化しました');
                     var postData = editor.getValue();
                     post('editor_text', {
@@ -168,18 +156,18 @@ $test_id = 1; // ダミー
                     });
                 });
 
-                /** 監視対象の要素オブジェクト */
+                // 監視対象の要素オブジェクト
                 const elem = document.getElementById('ace_editor');
                 console.log(elem);
 
-                /** 監視時のオプション */
+                // 監視時のオプション
                 const config = {
                     childList: true,
                     characterData: true,
                     subtree: true
                 };
 
-                /** 要素の変化監視をスタート */
+                // 要素の変化監視をスタート
                 observer.observe(elem, config);
             </script>
             <div id="editor_input_div">
@@ -262,12 +250,11 @@ $test_id = 1; // ダミー
         </div>
         <input type="hidden" name="test_id" value="<?php echo $test_id; ?>">
         <input type="hidden" name="Q_number" value="<?php echo $Q_number; ?>">
-        <input type="hidden" name="sotrage" value="<?php echo $storage; ?>">
 
         <!-- ボタン -->
         <div style="margin-top: 10px;">
             <input type="submit" name="next" value="次へ" id="next_button">
-            <input type="submit" name="create" value="テスト作成">
+            <input type="submit" name="create" value="課題作成">
             <!-- <a href="clrsec.php">clear</a> -->
         </div>
     </form>

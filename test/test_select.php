@@ -13,7 +13,7 @@ if (!($_SESSION["ROLE"] == '2')) {
     exit;
 }
 
-$class_id = '26'; // テスト用
+$class_id = $_SESSION['CLASS_ID']; // テスト用
 
 try {
     // sql 1
