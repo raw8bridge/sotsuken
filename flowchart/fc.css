@@ -18,7 +18,6 @@
     text-align: center;
     outline: none;
     border: none;
-    
 }
 
 .select_line {
@@ -76,4 +75,8 @@ label {
 .decision_container {
     display: flex;
     align-items: flex-start;
+}
+
+#download {
+    color: gray;
 }

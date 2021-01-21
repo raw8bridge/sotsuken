@@ -36,7 +36,7 @@ if ($_POST['status'] == 'next' || $_POST['status'] == 'start') {
         );
     }
     $test_name = $_SESSION['ans'][0]['test_name'];
-} elseif($_POST['status'] == 'finish') {
+} elseif ($_POST['status'] == 'finish') {
     header("Location: ./test_finish.php");
 } else {
     header("Location: ./test_select.php");
@@ -75,7 +75,30 @@ try {
     $rows = $stmt->fetchAll();
     $Q_row = $rows[(int)$Q_number - 1];
     $cnt = count($rows);
-    // var_dump($cnt); // 確認用
+
+    // コード有無
+    if ($Q_row['is_code'] == 1) {
+        $stmt = $pdo->prepare('SELECT * FROM `Q_Code` WHERE Q_ID=?');
+        $stmt->bindValue(1, (int)$Q_row['ID'], PDO::PARAM_INT);
+        $stmt->execute();
+        $codes = $stmt->fetchAll();
+        $code = $codes[0];
+        $use_code = true;
+    } else {
+        $use_code = false;
+    }
+    // フローチャート有無
+    if ($Q_row['is_flowchart'] == 1) {
+        $stmt = $pdo->prepare('SELECT * FROM `Flowchart` WHERE Q_ID=?');
+        $stmt->bindValue(1, (int)$Q_row['ID'], PDO::PARAM_INT);
+        $stmt->execute();
+        $imgs = $stmt->fetchAll();
+        $img = $imgs[0];
+        $use_flowchart = true;
+    } else {
+        $use_flowchart = false;
+    }
+
     if ($cnt == (int)$Q_number) {
         $status = "finish";
         $btn_txt = "回答";
@@ -115,6 +138,10 @@ $pdo = null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.3.0/highlightjs-line-numbers.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+    <link rel="stylesheet" href="style/ans.css">
     <title>テスト回答ページ</title>
 </head>
 
@@ -122,6 +149,23 @@ $pdo = null;
     <h2><?php echo hsc($test_name); ?></h2>
     <h3>問<?php echo hsc($Q_row['Q_number']); ?></h3>
     <p><?php echo hsc($Q_row['Q_text']); ?></p>
+    <?php
+    if ($use_code) {
+        echo ('<pre><code>');
+        echo ($code['code']);
+        echo ('</code></pre>');
+    }
+    ?>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad();
+    </script>
+
+    <?php
+    if ($use_flowchart) {
+        echo ('<img src="img.php?id=' . $img['ID'] . '" width="360px" height="auto">');
+    }
+    ?>
 
     <form action="test_ans.php" method="post">
         <?php

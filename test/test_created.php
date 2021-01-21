@@ -8,6 +8,6 @@
 <body>
     <h1>課題作成完了</h1>
     <p>課題の作成が完了しました。</p>
-    <a href="Main_tercher.php">メイン画面に戻る</a>
+    <a href="Main_teacher.php">メイン画面に戻る</a>
 </body>
 </html>

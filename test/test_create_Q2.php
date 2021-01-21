@@ -2,7 +2,7 @@
 include "./function/htmlspchar.php";
 session_start();
 
-if (isset($_POST['next'])) {
+if (isset($_POST['next']) || isset($_POST['create'])) {
     if (isset($_POST['Q_number'])) {
         $Q_number = $_POST['Q_number'];
 
@@ -13,21 +13,21 @@ if (isset($_POST['next'])) {
             'is_correct' => $_POST['is_correct'],
             'use_editor' => isset($_POST['c_editor']),
             'use_flowchart' => isset($_POST['c_flowchart']),
-            'use_math' => isset($_POST['c_math']),
             'editor_text' => $_POST['editor_text']
         );
 
-        echo ('<pre>');
-        var_dump($_SESSION['test']); // 確認用メッセージ
-        echo ('</pre>');
+        // echo ('<pre>');
+        // var_dump($_SESSION['test']); // 確認用メッセージ
+        // echo ('</pre>');
         $Q_number++;
+        if (isset($_POST['create'])) {
+            $_SESSION['test']['iscreate'] = true;
+            header("Location: ./test_view2.php");
+            exit();
+        }
     }
     // echo "next"; // テストメッセージ
-} elseif (isset($_POST['create'])) {
-    $_SESSION['test']['iscreate'] = true;
 
-    header("Location: ./test_view2.php");
-    exit();
 } else {
     $Q_number = 1;
 }
@@ -35,18 +35,12 @@ if (isset($_POST['next'])) {
 if (isset($_POST['test_name']) and isset($_POST['subject_id'])) {
     $test_name = $_POST['test_name'];
     $subject_id = $_POST['subject_id'];
-    $creater_id = 1; // 作成者ID、ダミー
+    $creater_id = $_SESSION['ID']; // 作成者ID
     $_SESSION['test'][0] = array(
         'test_name' => $test_name,
         'creater_id' => $creater_id,
         'subject_id' => $subject_id
     );
-}
-
-$storage = array();
-if (isset($_POST['storage'])) {
-    $storage = $_POST['storage'];
-    print_r($storage);
 }
 
 $test_id = 1; // ダミー
@@ -57,7 +51,7 @@ $test_id = 1; // ダミー
 
 <head>
     <meta charset="utf-8">
-    <title>フォーム送信テストページ</title>
+    <title>設問作成</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="./test_script2.js"></script>
     <script src="./option.js"></script>
@@ -66,10 +60,6 @@ $test_id = 1; // ダミー
     <link rel="stylesheet" href="./fc/fc.css">
     <link rel="stylesheet" href="./math/math.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-    <!-- Bootstrap CSS -->
-    <!--
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous"> -->
 </head>
 
 <body>
@@ -95,7 +85,7 @@ $test_id = 1; // ダミー
     // }
     ?>
 
-    <h2><?php echo hsc($test_name); ?></h2>
+    <h2><?php echo hsc($_SESSION['test'][0]['test_name']); ?></h2>
     <h3>問<?php echo hsc($Q_number); ?></h3>
 
     <form action="" method="post" id="main_form">
@@ -116,7 +106,7 @@ $test_id = 1; // ダミー
             <div class="btn-group">
                 <div class="btn-group">
                     <!-- 拡大・縮小ボタン -->
-                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-search"></i> <span class="caret"></span></button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-search"></i> <span class="caret"></span></button>
                     <ul class="dropdown-menu" id="font-size">
                         <li><a href="#" data-size="10">小さい</a></li>
                         <li><a href="#" data-size="12">普通</a></li>
@@ -125,7 +115,7 @@ $test_id = 1; // ダミー
                 </div>
                 <!-- 言語モードボタン -->
                 <div class="btn-group">
-                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="lang">言語<span class="caret"></span></button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="lang">言語<span class="caret"></span></button>
                     <ul class="dropdown-menu" id="language-mode">
                         <li><a href="#" data-language="python">Python</a></li>
                         <li><a href="#" data-language="java">Java</a></li>
@@ -135,10 +125,10 @@ $test_id = 1; // ダミー
                     </ul>
                 </div>
                 <!-- 保存ボタン -->
-                <button id="save" class="btn btn-default"><i class="glyphicon glyphicon-floppy-save"></i></button>
+                <button type="button" id="save" class="btn btn-default"><i class="glyphicon glyphicon-floppy-save"></i></button>
                 <!-- 読み込みボタン -->
-                <button id="load" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i></button>
-                <a id="post">post</a>
+                <button type="button" id="load" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i></button>
+                <!-- <a id="post">post</a> -->
             </div>
 
             <div id="ace_editor" style="height: 600px; width: 800px;"></div>
@@ -158,7 +148,7 @@ $test_id = 1; // ダミー
                 // });
 
                 var observer = new MutationObserver(function(mutations) {
-                    /** DOMの変化が起こった時の処理 */
+                    // DOMの変化が起こった時の処理
                     // console.log('DOMが変化しました');
                     var postData = editor.getValue();
                     post('editor_text', {
@@ -166,18 +156,18 @@ $test_id = 1; // ダミー
                     });
                 });
 
-                /** 監視対象の要素オブジェクト */
+                // 監視対象の要素オブジェクト
                 const elem = document.getElementById('ace_editor');
                 console.log(elem);
 
-                /** 監視時のオプション */
+                // 監視時のオプション
                 const config = {
                     childList: true,
                     characterData: true,
                     subtree: true
                 };
 
-                /** 要素の変化監視をスタート */
+                // 要素の変化監視をスタート
                 observer.observe(elem, config);
             </script>
             <div id="editor_input_div">
@@ -221,19 +211,19 @@ $test_id = 1; // ダミー
             <div>
                 <nav>
                     <div class="button-div">
-                        <button id="clear" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
+                        <button type="button" id="clear" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
                             <img src="./math/img/clear.svg">
                         </button>
-                        <button id="undo" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
+                        <button type="button" id="undo" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
                             <img src="./math/img/undo.svg">
                         </button>
-                        <button id="redo" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
+                        <button type="button" id="redo" class="nav-btn btn-fab-mini btn-lightBlue" disabled>
                             <img src="./math/img/redo.svg">
                         </button>
-                        <button onclick="getResult();">Result</button>
+                        <button type="button" onclick="getCopy();">コピー</button>
                     </div>
                     <div class="spacer"></div>
-                    <button class="classic-btn" id="convert" disabled>Convert</button>
+                    <button type="button" class="classic-btn" id="convert" disabled>Convert</button>
                 </nav>
                 <div id="editor" touch-action="none"></div>
             </div>
@@ -260,13 +250,12 @@ $test_id = 1; // ダミー
         </div>
         <input type="hidden" name="test_id" value="<?php echo $test_id; ?>">
         <input type="hidden" name="Q_number" value="<?php echo $Q_number; ?>">
-        <input type="hidden" name="sotrage" value="<?php echo $storage; ?>">
 
         <!-- ボタン -->
-        <div>
+        <div style="margin-top: 10px;">
             <input type="submit" name="next" value="次へ" id="next_button">
-            <input type="submit" name="create" value="テスト作成">
-            <a href="clrsec.php">clear</a>
+            <input type="submit" name="create" value="課題作成">
+            <!-- <a href="clrsec.php">clear</a> -->
         </div>
     </form>
 </body>

@@ -54,15 +54,49 @@ if (!empty($subject_id) && !empty($creater_id) && !empty($test_name)) {
       $Q_number = $t['number'];
       $Q_text = $t['text'];
       try {
-        $stmt = $pdo->prepare('INSERT INTO QuestionTable (test_ID, Q_number, Q_text) VALUES (?, ?, ?);');
+        $sql = 'INSERT INTO QuestionTable (test_ID, Q_number, Q_text, is_code, is_flowchart) VALUES (?, ?, ?, ?, ?);';
+        $stmt = $pdo->prepare($sql);
         $stmt->bindValue(1, (int)$test_id, PDO::PARAM_INT);
         $stmt->bindValue(2, (int)$Q_number, PDO::PARAM_INT);
         $stmt->bindValue(3, $Q_text);
+        $stmt->bindValue(5, $_SESSION['test'][$Q_number]['use_editor']);
+        $stmt->bindValue(4, $_SESSION['test'][$Q_number]['use_flowchart'] + 0);
         $stmt->execute();
         $Q_id = $pdo->lastInsertId(); // 設問ID
       } catch (PDOException $e) {
         print('Error:' . $e->getMessage());
         die();
+      }
+
+      if (!empty($t['img']['name'])) {
+        $img = $t['img'];
+        try {
+          $sql = 'INSERT INTO Flowchart (Q_ID, fc_name, img_type, fc_content, img_size) VALUES (?, ?, ?, ?, ?);';
+          $stmt = $pdo->prepare($sql);
+          $stmt->bindValue(1, (int)$Q_id, PDO::PARAM_INT);
+          $stmt->bindValue(2, $img['name'], PDO::PARAM_STR);
+          $stmt->bindValue(3, $img['type'], PDO::PARAM_STR);
+          $stmt->bindValue(4, $img['content'], PDO::PARAM_STR);
+          $stmt->bindValue(5, (int)$img['size'], PDO::PARAM_INT);
+          $stmt->execute();
+        } catch (PDOException $e) {
+          print('Error:' . $e->getMessage());
+          die();
+        }
+      }
+
+      if (!empty($t['editor_text'])) {
+        try {
+          $sql = 'INSERT INTO Q_Code (Q_ID, P_language_ID, code) VALUES (?, ?, ?);';
+          $stmt = $pdo->prepare($sql);
+          $stmt->bindValue(1, (int)$Q_id, PDO::PARAM_INT);
+          $stmt->bindValue(2, (int)1, PDO::PARAM_INT);
+          $stmt->bindValue(3, $t['editor_text'], PDO::PARAM_STR);
+          $stmt->execute();
+        } catch (PDOException $e) {
+          print('Error:' . $e->getMessage());
+          die();
+        }
       }
 
       $cnt = 0;

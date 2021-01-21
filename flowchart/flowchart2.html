@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <form id="check_form" action="./fc_get.php" method="post">
+    <form id="check_form" action="./fc_get.php" method="post" enctype="multipart/form-data">
         <div class="flex-container">
             <div class="check_form_area">
                 <div>
@@ -52,7 +52,8 @@
         </div>
         <input type="submit" value="submit">
     </form>
-    <button type="button" onclick="getChart()">get</button>
+    <button type="button" onclick="saveChart()">保存</button>
+    <a id="download" download="canvas.png">ダウンロード</a>
     <img src="" alt="" id="canvas-image">
 </body>
 

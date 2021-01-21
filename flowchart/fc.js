@@ -94,7 +94,7 @@ function addLoop(symbol, i, selected_val) {
     input_data2.id = 'inputform_' + (i + 1);
     input_data2.placeholder = 'フォーム-' + (i + 1);
     input_data2.className = '' + symbol + '_end';
-    // 追加するラジオボタン
+    // 追加するラジオボタンとラベル
     var flex_div = document.createElement('div');
     flex_div.className = 'flex-container';
     var radio_data2 = document.createElement('input');
@@ -194,14 +194,49 @@ function addDecision(symbol, i, selected_val) {
     }
 }
 
-function getChart() {
+function saveChart() {
     $('.select_line').hide();
     $('.line_img').css('margin-left', '98px');
     html2canvas(document.querySelector("#capture")).then(canvas => {
-        // document.body.appendChild(canvas)
         var imageData = canvas.toDataURL();
-        // imgタグに画像として、canvasの内容を挿入
-        document.getElementById('canvas-image').setAttribute("src", canvas.toDataURL());
+        document.getElementById("download").href = imageData;
+        console.log(imageData);
     });
+    $('.select_line').show();
+    $('.line_img').css('margin-left', '70px');
+    $('#download').css('color', '-webkit-link');
 }
 
+var file2blob = function (file) {
+    html2canvas(document.querySelector("#capture")).then(canvas => {
+        var base64 = canvas.toDataURL();
+        var blob = base64toBlob(base64);
+        deffered.resolve(blob);
+    });
+    return deffered.promise;
+};
+
+var base64toBlob = function (base64) {
+    var tmp = base64.split(',');
+    var data = atob(tmp[1]);
+    var mime = tmp[0].split(':')[1].split(';')[0];
+    var buf = new Uint8Array(data.length);
+    for (var i = 0; i < data.length; i++) {
+        buf[i] = data.charCodeAt(i);
+    }
+    var blob = new Blob([buf], { type: mime });
+    return blob;
+}
+
+var file = document.getElementById('file');
+file.addEventListener('change', function (event) {
+    var image = event.target.files[0]
+    convertImg(image)
+        .then(function (image) {
+            var formData = new FormData();
+            formData.append('image', image, 'image.jpg');
+            var request = new XMLHttpRequest();
+            request.open('POST', 'http://example.com/');
+            request.send(formData);
+        });
+});
