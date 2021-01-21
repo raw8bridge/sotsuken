@@ -14,7 +14,7 @@
 
 #main_form input {
     display: block;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
     text-align: center;
     outline: none;
     border: none;
@@ -22,14 +22,25 @@
 }
 
 .select_line {
+    margin-top: 10px;
     width: 20px;
     height: 20px;
-    margin-left: 90px;
+}
+
+label {
+    height: 40px;
+}
+
+.line_img {
+    width: 2px;
+    height: 40px;
+    margin-left: 70px;
 }
 
 .terminator {
     width: 200px;
     height: 40px;
+    margin: 0;
     background-image: url("./img/terminator.png");
     background-size: 200px 40px;
 }

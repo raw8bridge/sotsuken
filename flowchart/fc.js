@@ -32,7 +32,7 @@ function addForm() {
         i++;
     } else if (symbol == 'decision') {
         addDecision(symbol, i, selected_val);
-        i+=2;
+        i += 2;
     }
 
     i++;
@@ -49,17 +49,28 @@ function addProcess(symbol, i, selected_val) {
     input_data.id = 'inputform_' + i;
     input_data.placeholder = 'フォーム-' + i;
     input_data.className = '' + symbol;
-    // 追加するラジオボタン
+    // 追加するラジオボタンとラベル
+    var flex_div = document.createElement('div');
+    flex_div.className = 'flex-container';
     var radio_data = document.createElement('input');
     radio_data.type = 'radio';
     radio_data.name = 'select_line';
     radio_data.id = 'under_' + i;
     radio_data.value = 'input_' + i;
     radio_data.className = 'select_line';
+    var radio_label = document.createElement('label');
+    radio_label.htmlFor = 'under_' + i;
+    var label_img = document.createElement('img');
+    label_img.className = 'line_img';
+    label_img.src = './img/line.png';
+
+    radio_label.appendChild(label_img);
+    flex_div.appendChild(radio_data);
+    flex_div.appendChild(radio_label);
 
     // divに追加
     input_div.appendChild(input_data);
-    input_div.appendChild(radio_data);
+    input_div.appendChild(flex_div);
 
     // HTML出力
     if (selected_val == 'input_0') {
@@ -84,15 +95,26 @@ function addLoop(symbol, i, selected_val) {
     input_data2.placeholder = 'フォーム-' + (i + 1);
     input_data2.className = '' + symbol + '_end';
     // 追加するラジオボタン
+    var flex_div = document.createElement('div');
+    flex_div.className = 'flex-container';
     var radio_data2 = document.createElement('input');
     radio_data2.type = 'radio';
     radio_data2.name = 'select_line';
     radio_data2.id = 'under_' + (i + 1);
     radio_data2.value = 'input_' + (i + 1);
     radio_data2.className = 'select_line';
+    var radio_label = document.createElement('label');
+    radio_label.htmlFor = 'under_' + (i + 1);
+    var label_img = document.createElement('img');
+    label_img.className = 'line_img';
+    label_img.src = './img/line.png';
+
+    radio_label.appendChild(label_img);
+    flex_div.appendChild(radio_data2);
+    flex_div.appendChild(radio_label);
     // divに追加
     input_div2.appendChild(input_data2);
-    input_div2.appendChild(radio_data2);
+    input_div2.appendChild(flex_div);
     // HTML出力
     var parent = document.getElementById('input_' + i);
     parent.parentNode.insertBefore(input_div2, parent.nextSibling);
@@ -109,10 +131,10 @@ function addDecision(symbol, i, selected_val) {
     // 横並び要素（子要素）
     var flex_div1 = document.createElement('div');
     flex_div1.id = 'line_' + i + '_1';
-    flex_div1.className =  'left_line';
+    flex_div1.className = 'left_line';
     var flex_div2 = document.createElement('div');
     flex_div2.id = 'line_' + i + '_2';
-    flex_div2.className =  'right_line';
+    flex_div2.className = 'right_line';
     // 追加するdiv（ラジオボタン）
     var input_div1 = document.createElement('div');
     input_div1.id = 'input_' + (i + 1);
@@ -171,3 +193,15 @@ function addDecision(symbol, i, selected_val) {
         parent.parentNode.insertBefore(wrap_div, parent.nextSibling);
     }
 }
+
+function getChart() {
+    $('.select_line').hide();
+    $('.line_img').css('margin-left', '98px');
+    html2canvas(document.querySelector("#capture")).then(canvas => {
+        // document.body.appendChild(canvas)
+        var imageData = canvas.toDataURL();
+        // imgタグに画像として、canvasの内容を挿入
+        document.getElementById('canvas-image').setAttribute("src", canvas.toDataURL());
+    });
+}
+
