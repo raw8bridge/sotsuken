@@ -6,3 +6,6 @@ session_start();
     // $no = 1 / 0;
     // print_r(error_get_last ( ));
     print_r($_SESSION['test']);
+?>
+<br>
+<a href="../test_session.php">SESSION確認</a>

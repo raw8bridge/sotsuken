@@ -163,7 +163,7 @@ $pdo = null;
 
     <?php
     if ($use_flowchart) {
-        echo ('<img src="img.php?id=' . $img['ID'] . '" width="360px" height="auto">');
+        echo ('<img src="img.php?id=' . $img['ID'] . '" width="280px" height="auto">');
     }
     ?>
 
