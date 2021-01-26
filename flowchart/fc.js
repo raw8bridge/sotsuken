@@ -197,6 +197,7 @@ function addDecision(symbol, i, selected_val) {
 function saveChart() {
     $('.select_line').hide();
     $('.line_img').css('margin-left', '98px');
+    window.scrollTo(0, 0);
     html2canvas(document.querySelector("#capture")).then(canvas => {
         var imageData = canvas.toDataURL();
         document.getElementById("download").href = imageData;

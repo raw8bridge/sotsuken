@@ -186,6 +186,9 @@ $pdo = null;
                     <li>
                         <input type="radio" name="select_symbol" value="loop">ループ
                     </li>
+                    <li>
+                        <input type="radio" name="select_symbol" value="lineadd">線
+                    </li>
                 </ul>
             </div>
             <div class="main_form_area">

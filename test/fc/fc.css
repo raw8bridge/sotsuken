@@ -31,10 +31,39 @@ label {
     margin: 0;
 }
 
+.left_label {
+    margin-right: 99px;
+}
+
 .line_img {
     width: 2px;
     height: 40px;
     margin-left: 79px;
+}
+
+.line2_img {
+    width: 101px;
+    height: 80px;
+    margin: 0;
+}
+
+.line3_img {
+    width: 101px;
+    height: 40px;
+    margin-left: 79px;
+}
+
+.line4_img {
+    line-height: 0;
+    width: 101px;
+    height: 2px;
+    margin: 0;
+}
+
+.horizonal_line {
+    line-height: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .terminator {

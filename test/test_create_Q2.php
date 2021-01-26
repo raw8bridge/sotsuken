@@ -1,8 +1,10 @@
 <?php
 include "./function/htmlspchar.php";
 session_start();
-
+    
 if (isset($_POST['next']) || isset($_POST['create'])) {
+
+
     if (isset($_POST['Q_number'])) {
         $Q_number = $_POST['Q_number'];
 
@@ -11,11 +13,25 @@ if (isset($_POST['next']) || isset($_POST['create'])) {
             'text' => $_POST['main_text'],
             'checkbox_text' => $_POST['checkbox_text'],
             'is_correct' => $_POST['is_correct'],
-            'use_editor' => isset($_POST['c_editor']),
-            'use_flowchart' => isset($_POST['c_flowchart']),
-            'editor_text' => $_POST['editor_text']
+            'use_editor' => false,
+            'use_flowchart' => false,
+            'editor_text' => null
         );
+        if (!empty($_POST['editor_text'])){
+            $_SESSION['test'][$Q_number]['use_editor'] = true;
+            $_SESSION['test'][$Q_number]['editor_text'] = $_POST['editor_text'];
+        }
 
+        // 画像を保存
+        if (!empty($_FILES['image']['name'])) {
+            $_SESSION['test'][$Q_number]['img'] = array(
+                'name' => $_FILES['image']['name'],
+                'type' => $_FILES['image']['type'],
+                'content' => file_get_contents($_FILES['image']['tmp_name']),
+                'size' => $_FILES['image']['size']
+            );
+            $_SESSION['test'][$Q_number]['use_flowchart'] = true;
+        }
         // echo ('<pre>');
         // var_dump($_SESSION['test']); // 確認用メッセージ
         // echo ('</pre>');
@@ -43,7 +59,19 @@ if (isset($_POST['test_name']) and isset($_POST['subject_id'])) {
     );
 }
 
-$test_id = 1; // ダミー
+include './db/connectDB.php';
+$id = $test_id;
+try {
+    $stmt = $pdo->prepare('SELECT * FROM P_Languages');
+    $stmt->execute();
+    $lang_rows = $stmt->fetchAll();
+    // var_dump($lang_rows);
+} catch (PDOException $e) {
+    print('Error:' . $e->getMessage());
+    die();
+}
+$pdo = null;
+
 ?>
 
 <!doctype html>
@@ -63,32 +91,10 @@ $test_id = 1; // ダミー
 </head>
 
 <body>
-    <?php
-    // $dsn = 'mysql:host=localhost;dbname=OnlineTest;charset=utf8';
-    // $user = 'yuta';
-    // $password = 'dbpass';
-
-    // try {
-    //     $pdo = new PDO($dsn, $user, $password);
-    //     // echo "接続成功";
-    //     // sql
-    //     $sql = 'INSERT INTO TestTable (subject_ID, creater_ID, test_name) VALUES (1, 1, "' . $_POST['test_name'] . '")';
-    //     $statement = $pdo->query($sql);
-    //     // 登録したデータのIDを取得
-    //     $test_id = $pdo->lastInsertId();
-
-    //     //データベース接続切断
-    //     $pdo = null;
-    // } catch (PDOException $e) {
-    //     print('Error:' . $e->getMessage());
-    //     die();
-    // }
-    ?>
-
     <h2><?php echo hsc($_SESSION['test'][0]['test_name']); ?></h2>
     <h3>問<?php echo hsc($Q_number); ?></h3>
 
-    <form action="" method="post" id="main_form">
+    <form action="" method="post" id="main_form" enctype="multipart/form-data">
         <!-- テキスト -->
         <h4>問題文</h4>
         <textarea name="main_text" rows="8" cols="50" class="main_text_form"></textarea>
@@ -117,11 +123,11 @@ $test_id = 1; // ダミー
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="lang">言語<span class="caret"></span></button>
                     <ul class="dropdown-menu" id="language-mode">
-                        <li><a href="#" data-language="python">Python</a></li>
-                        <li><a href="#" data-language="java">Java</a></li>
-                        <li><a href="#" data-language="ruby">Ruby</a></li>
-                        <li><a href="#" data-language="html">HTML</a></li>
-                        <li><a href="#" data-language="javascript">JavaScript</a></li>
+                        <?php
+                        foreach ($lang_rows as $row) {
+                            echo ('<li><a href="#" data-language="' . hsc($row['language_name']) . '">' . hsc($row['language_name']) . '</a></li>');
+                        }
+                        ?>
                     </ul>
                 </div>
                 <!-- 保存ボタン -->
@@ -139,14 +145,6 @@ $test_id = 1; // ダミー
             <script type="text/javascript" src="./ace_editor/ace_editor.js"></script>
 
             <script>
-                // $('#post').click(function(e) {
-                //     // console.log("test");
-                //     var postData = editor.getValue();
-                //     post('editor_text', {
-                //         editor_text: postData
-                //     });
-                // });
-
                 var observer = new MutationObserver(function(mutations) {
                     // DOMの変化が起こった時の処理
                     // console.log('DOMが変化しました');
@@ -191,16 +189,25 @@ $test_id = 1; // ダミー
                 </ul>
             </div>
             <div class="main_form_area">
-                <div id="input_0">
-                    <input type="text" name="start" id="inputform_0" class="terminator" placeholder="開始">
-                    <input type="radio" name="select_line" id="under_0" value="input_0" class="select_line" checked>
+                <div id="capture">
+                    <div id="input_0">
+                        <input type="text" name="start" id="inputform_0" class="terminator" placeholder="開始">
+                        <div class="flex-container">
+                            <input type="radio" name="select_line" id="under_0" value="input_0" class="select_line" checked>
+                            <label for="under_0">
+                                <img class="line_img" src="./fc/img/line.png">
+                            </label>
+                        </div>
+                    </div>
+                    <div id="add_area"></div>
+                    <input type="text" name="last" id="inputform_last" class="terminator" placeholder="終了">
                 </div>
-                <div id="add_area"></div>
-                <input type="text" name="last" id="inputform_last" class="terminator" placeholder="終了">
-
-                <input type="button" value="追加" onclick="addForm()">
+                <button type="button" onclick="addForm()">追加</button>
+                <button type="button" onclick="saveChart()">保存</button>
+                <a id="download" download="canvas.png">ダウンロード</a>
+                <input type="file" name="image">
             </div>
-
+            <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
             <script type="text/javascript" src="./fc/fc.js"></script>
         </div>
 
