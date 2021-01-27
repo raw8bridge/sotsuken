@@ -1,3 +1,13 @@
 .hljs-ln-n{
     margin-right: 10px;
 }
+
+.fc_img {
+    width: 300px;
+    height: auto;
+    margin: 20px 50px;
+}
+
+.code_div {
+    width: 600px;
+}

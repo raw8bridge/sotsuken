@@ -11,7 +11,7 @@ try {
 
     header('Content-Type: ' . $row['img_type']);
     echo $row['fc_content'];
-    // var_dump($row);
+    // var_dump($row);  
 } catch (PDOException $e) {
     print('Error:' . $e->getMessage());
     die();

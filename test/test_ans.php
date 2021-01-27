@@ -149,6 +149,7 @@ $pdo = null;
     <h2><?php echo hsc($test_name); ?></h2>
     <h3>問<?php echo hsc($Q_row['Q_number']); ?></h3>
     <p><?php echo hsc($Q_row['Q_text']); ?></p>
+    <div class="code_div">
     <?php
     if ($use_code) {
         echo ('<pre><code>');
@@ -156,6 +157,7 @@ $pdo = null;
         echo ('</code></pre>');
     }
     ?>
+    </div>
     <script>
         hljs.initHighlightingOnLoad();
         hljs.initLineNumbersOnLoad();
@@ -163,7 +165,7 @@ $pdo = null;
 
     <?php
     if ($use_flowchart) {
-        echo ('<img src="img.php?id=' . $img['ID'] . '" width="280px" height="auto">');
+        echo ('<img src="img.php?id=' . $img['ID'] . '" class="fc_img">');
     }
     ?>
 
