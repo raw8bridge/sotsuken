@@ -38,7 +38,7 @@ if (isset($_POST['next']) || isset($_POST['create'])) {
         $Q_number++;
         if (isset($_POST['create'])) {
             $_SESSION['test']['iscreate'] = true;
-            header("Location: ./test_view2.php");
+            header("Location: ./test_view.php");
             exit();
         }
     }
@@ -81,7 +81,7 @@ $pdo = null;
     <meta charset="utf-8">
     <title>設問作成</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="./test_script2.js"></script>
+    <script src="./test_script.js"></script>
     <script src="./option.js"></script>
     <script src="./function/post_hidden.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">

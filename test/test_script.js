@@ -17,7 +17,7 @@ function renumber(){
     var idx=$('.no').index(this);
     $(this).text(idx+2);
     $(this).nextAll('.is_correct_form').attr('value',idx+1);
-    $(this).nextAll('.checkbox_text_form').attr('name','checkbox_text_'+(idx+1));
+    $(this).nextAll('.checkbox_text_form').attr('value','');
   });
 };
 function setButton(){

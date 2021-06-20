@@ -6,7 +6,7 @@ try {
     // データベースに接続
     $dsn = 'mysql:host=localhost;dbname=OnlineTest;charset=utf8';
     $user = 'yuta';
-    $password = 'dbpass';
+    $password = '------';
 
     $pdo = new PDO(
         $dsn,

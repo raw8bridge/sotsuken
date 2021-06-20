@@ -3,7 +3,7 @@
     //プロパティを設定
         public $host = 'localhost';
         public $user = 'yuta';
-        public $pass = 'dbpass';
+        public $pass = '------';
         public $dbname = 'OnlineTest';
         public $dsn = 'mysql:host=localhost;dbname=OnlineTest;charset=utf8';
     //メソッドを設定

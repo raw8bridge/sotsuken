@@ -65,8 +65,8 @@ iink.register(editorElement, {
         server: {
             scheme: 'https',
             host: 'webdemoapi.myscript.com',
-            applicationKey: '515131ab-35fa-411c-bb4d-3917e00faf60',
-            hmacKey: '54b2ca8a-6752-469d-87dd-553bb450e9ad'
+            applicationKey: '',
+            hmacKey: ''
         },
         iink: {
             math: {
